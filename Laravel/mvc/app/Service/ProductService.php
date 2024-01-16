@@ -19,4 +19,8 @@ class ProductService {
         $data['contents'] = ProductResource::collection($data['contents']);
         return $data;
     }
+
+    public function saveOrUpdate(array $input) {
+        return $this->repository->saveOrUpdate($input);
+    }
 };
