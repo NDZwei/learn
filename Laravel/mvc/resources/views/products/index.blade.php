@@ -7,6 +7,8 @@
         > Create product
         </x-atoms.action-link>
 
+        <button @click="openModal" class="btn btn-danger">Delete All Products</button>
+
         <label for="category_id">Category</label>
         <x-molecules.select-input
             name="category_id"
@@ -34,4 +36,3 @@
         />
     </div>
 @include('components.layout.footer')
-
