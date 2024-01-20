@@ -5,8 +5,9 @@ import '../../models/Administrative.dart';
 
 class AdministrativeDetail extends StatefulWidget {
   final int? id;
+  final int? parentId;
 
-  const AdministrativeDetail({Key? key, this.id}) : super(key: key);
+  const AdministrativeDetail({Key? key, this.id, this.parentId}) : super(key: key);
 
   @override
   AdministrativeDetailState createState() => AdministrativeDetailState();
@@ -45,6 +46,10 @@ class AdministrativeDetailState extends State<AdministrativeDetail> {
         name: _nameController.text,
         level: int.parse(_levelController.text),
       );
+
+      if (widget.parentId != null) {
+        administrative.parentId = widget.parentId;
+      }
 
       await _administrativeService.saveAdministrative(administrative);
 

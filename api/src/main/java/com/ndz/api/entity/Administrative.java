@@ -40,7 +40,7 @@ public class Administrative {
     @Column(name = "parent_id", insertable = false, updatable = false)
     private Long parentId;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("name asc")
     private List<Administrative> childrens = new ArrayList<>();
 
@@ -58,6 +58,5 @@ public class Administrative {
                 this.childrens.add(new Administrative(child, false));
             });
         }
-
     }
 }

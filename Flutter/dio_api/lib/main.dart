@@ -1,4 +1,4 @@
-import 'package:dio_api/screens/administrative/index.dart';
+import 'package:dio_api/screens/new_administrative/administrative_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AdministrativeIndex(),
+      home: AdministrativeScreen(),
     );
   }
 }

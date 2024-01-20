@@ -1,5 +1,6 @@
 package com.ndz.api.repository;
 
+import com.ndz.api.dto.AdministrativeDto;
 import com.ndz.api.entity.Administrative;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +14,9 @@ import java.util.List;
 */
 @Repository
 public interface AdministrativeRepository extends JpaRepository<Administrative, Long> {
-    @Query(value = "select e from Administrative e where e.parent is null")
-    List<Administrative> getAllProvince();
+    @Query(value = "select new com.ndz.api.dto.AdministrativeDto(e) from Administrative e where e.parentId is null")
+    List<AdministrativeDto> getAllProvince();
 
-    @Query(value = "select e from Administrative e where e.parentId = :parentId")
-    List<Administrative> getByParentId(Long parentId);
+    @Query(value = "select new com.ndz.api.dto.AdministrativeDto(e) from Administrative e where e.parentId = :parentId")
+    List<AdministrativeDto> getByParentId(Long parentId);
 }

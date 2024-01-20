@@ -5,6 +5,7 @@ package com.ndz.api.service;
     created_at: 1/11/2024
 */
 
+import com.ndz.api.dto.AdministrativeDto;
 import com.ndz.api.dto.BaseResponse;
 import com.ndz.api.entity.Administrative;
 import com.ndz.api.repository.AdministrativeRepository;
@@ -21,7 +22,7 @@ public class AdministrativeService extends BaseService {
     private AdministrativeRepository repository;
 
     public BaseResponse getAllProvince() {
-        List<Administrative> results = repository.getAllProvince();
+        List<AdministrativeDto> results = repository.getAllProvince();
         return getResponse200(results);
     }
 
@@ -29,7 +30,7 @@ public class AdministrativeService extends BaseService {
         if(parentId == null) {
             return getResponse500("Id null");
         }
-        List<Administrative> results = repository.getByParentId(parentId);
+        List<AdministrativeDto> results = repository.getByParentId(parentId);
         return getResponse200(results);
     }
 

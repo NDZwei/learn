@@ -24,6 +24,23 @@ class AdministrativeService {
     }
   }
 
+  Future<List<Administrative>> getAllByParent(int parentId) async {
+    try {
+      print("===========All children===========");
+      final response = await _dio.get('$baseUrl/get-by-parent/$parentId');
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = response.data;
+        final List<dynamic> data = responseData['data'];
+        List<Administrative> results = data.map((item) => Administrative.fromJson(item)).toList();
+        return results;
+      } else {
+        throw Exception('Failed to load administrative');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
+    }
+  }
+
   Future<Administrative> getAdministrative(int id) async {
     try {
       print("===========Administrative by id===========");
