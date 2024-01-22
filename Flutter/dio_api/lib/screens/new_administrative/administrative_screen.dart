@@ -55,7 +55,7 @@ class _AdministrativeScreenState extends State<AdministrativeScreen> {
             administrative: administrative,
             onEdit: () => _navigateToEditScreen(administrative),
             onDelete: () => _deleteAdministrative(administrative.id!),
-            onViewChildren: () => _viewChildren(administrative.id!),
+            onViewChildren: () => _viewChildren(administrative),
           );
         },
       ),
@@ -70,7 +70,7 @@ class _AdministrativeScreenState extends State<AdministrativeScreen> {
     print('Click create screen');
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AdministrativeFormScreen()),
+      MaterialPageRoute(builder: (context) => AdministrativeFormScreen(parentAdministrative: null)),
     );
   }
 
@@ -78,7 +78,7 @@ class _AdministrativeScreenState extends State<AdministrativeScreen> {
     print('Click edit screen');
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AdministrativeFormScreen(administrative: administrative)),
+      MaterialPageRoute(builder: (context) => AdministrativeFormScreen(parentAdministrative: administrative)),
     );
   }
 
@@ -92,14 +92,14 @@ class _AdministrativeScreenState extends State<AdministrativeScreen> {
     }
   }
 
-  void _viewChildren(int parentId) {
+  void _viewChildren(Administrative administrative) {
     print('View children');
-    _getChildren(parentId);
+    _getChildren(administrative);
   }
 
-  Future<void> _getChildren(int parentId) async {
+  Future<void> _getChildren(Administrative administrative) async {
     try {
-      List<Administrative> children = await _administrativeService.getAllByParent(parentId);
+      List<Administrative> children = await _administrativeService.getAllByParent(administrative.id!);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => AdministrativeScreen(children: children)),

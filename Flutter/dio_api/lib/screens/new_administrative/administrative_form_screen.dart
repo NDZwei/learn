@@ -4,9 +4,9 @@ import '../../models/Administrative.dart';
 import '../../services/administrative_service.dart';
 
 class AdministrativeFormScreen extends StatefulWidget {
-  final Administrative? administrative;
+  final Administrative? parentAdministrative;
 
-  AdministrativeFormScreen({this.administrative});
+  AdministrativeFormScreen({required this.parentAdministrative});
 
   @override
   _AdministrativeFormScreenState createState() => _AdministrativeFormScreenState();
@@ -17,28 +17,34 @@ class _AdministrativeFormScreenState extends State<AdministrativeFormScreen> {
   late TextEditingController _codeController;
   late TextEditingController _nameController;
   late TextEditingController _levelController;
-  late TextEditingController _parentIdController;
 
   @override
   void initState() {
     super.initState();
-    _codeController = TextEditingController(text: widget.administrative?.code ?? '');
-    _nameController = TextEditingController(text: widget.administrative?.name ?? '');
-    _levelController = TextEditingController(text: widget.administrative?.level.toString() ?? '');
-    _parentIdController = TextEditingController(text: widget.administrative?.parentId?.toString() ?? '');
+    _codeController = TextEditingController();
+    _nameController = TextEditingController();
+    _levelController = TextEditingController();
+
+    if (widget.parentAdministrative != null) {
+      // Nếu có parentAdministrative, tức là từ màn hình AdministrativeScreen chọn viewChildren
+      // Ta sẽ tự động gán parentId từ parentAdministrative.id
+      _levelController.text = (widget.parentAdministrative!.level + 1).toString();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.administrative == null ? 'Tạo mới' : 'Chỉnh sửa'),
+        title: Text(widget.parentAdministrative == null ? 'Tạo mới' : 'Chỉnh sửa'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (widget.parentAdministrative != null) // Ẩn khi không có parentAdministrative
+              Text('ParentId: ${widget.parentAdministrative!.id}'),
             TextField(
               controller: _codeController,
               decoration: InputDecoration(labelText: 'Mã'),
@@ -50,10 +56,6 @@ class _AdministrativeFormScreenState extends State<AdministrativeFormScreen> {
             TextField(
               controller: _levelController,
               decoration: InputDecoration(labelText: 'Cấp độ'),
-            ),
-            TextField(
-              controller: _parentIdController,
-              decoration: InputDecoration(labelText: 'ID cha'),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -72,15 +74,11 @@ class _AdministrativeFormScreenState extends State<AdministrativeFormScreen> {
         code: _codeController.text,
         name: _nameController.text,
         level: int.parse(_levelController.text),
-        parentId: _parentIdController.text.isNotEmpty ? int.parse(_parentIdController.text) : null,
+        parentId: widget.parentAdministrative?.id,
       );
 
-      if (widget.administrative == null) {
-        await _administrativeService.saveAdministrative(administrative);
-      } else {
-        administrative.id = widget.administrative!.id;
-        await _administrativeService.saveAdministrative(administrative);
-      }
+      await _administrativeService.saveAdministrative(administrative);
+
       Navigator.pop(context);
     } catch (error) {
       print('Lỗi khi lưu đơn vị hành chính: $error');
